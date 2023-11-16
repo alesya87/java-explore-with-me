@@ -19,7 +19,7 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     ports:
-      - "5432:5432"
+      - "1234:5432"
     environment:
       - POSTGRES_DB=stats-db
       - POSTGRES_USER=practicum
@@ -44,7 +44,7 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     ports:
-      - "5432:5432"
+      - "1234:5432"
     environment:
       - POSTGRES_DB=ewm-db
       - POSTGRES_USER=practicum
