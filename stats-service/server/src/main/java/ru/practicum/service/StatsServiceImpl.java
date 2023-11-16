@@ -4,10 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.HitAddDto;
 import ru.practicum.HitLogDto;
-import ru.practicum.StatsLogDto;
+import ru.practicum.StatsView;
 import ru.practicum.model.Hit;
 import ru.practicum.model.HitMapper;
-import ru.practicum.model.StatsMapper;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
@@ -29,11 +28,11 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<StatsLogDto> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<StatsView> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique) {
-            return StatsMapper.toStatsLogListDto(statsRepository.findUniqueViews(start, end, uris));
+            return statsRepository.findUniqueViews(start, end, uris);
         } else {
-            return StatsMapper.toStatsLogListDto(statsRepository.findNotUniqueViews(start, end, uris));
+            return statsRepository.findNotUniqueViews(start, end, uris);
         }
     }
 }

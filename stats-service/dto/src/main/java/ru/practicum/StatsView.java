@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatsLogDto {
+public class StatsView {
     private String app;
     private String uri;
     private Long hits;

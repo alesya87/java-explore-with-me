@@ -392,7 +392,7 @@
 				"type": "text/javascript",
 				"exec": [
 					"API = class {",
-					"    constructor(postman, verbose = false, baseUrl = \"http://stats-server:9090\") {",
+					"    constructor(postman, verbose = false, baseUrl = \"http://localhost:9090\") {",
 					"        this.baseUrl = baseUrl;",
 					"        this.pm = postman;",
 					"        this._verbose = verbose;",
@@ -500,7 +500,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://stats-server:9090",
+			"value": "http://localhost:9090",
 			"type": "string"
 		},
 		{

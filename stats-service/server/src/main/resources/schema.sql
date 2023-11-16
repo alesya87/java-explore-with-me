@@ -1,4 +1,4 @@
-drop table hits cascade;
+--drop table hits cascade;
 
 create TABLE IF NOT EXISTS hits
 (

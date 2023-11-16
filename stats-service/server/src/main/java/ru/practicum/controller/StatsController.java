@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.HitAddDto;
 import ru.practicum.HitLogDto;
-import ru.practicum.StatsLogDto;
+import ru.practicum.StatsView;
 import ru.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
@@ -29,10 +29,10 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<List<StatsLogDto>> get(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-                                         @RequestParam(required = false) List<String> uris,
-                                         @RequestParam(defaultValue = "false") Boolean unique) {
+    public ResponseEntity<List<StatsView>> get(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+                                               @RequestParam(required = false) List<String> uris,
+                                               @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("Получен запрос GET /stats с параметрами: start {}, end {}, uris {}, unique {}", start, end, uris, unique);
         return new ResponseEntity<>(statsService.get(start, end, uris, unique), HttpStatus.OK);
     }
