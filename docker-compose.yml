@@ -8,6 +8,7 @@ services:
     depends_on:
       - stats-db
     environment:
+      - TZ=Europe/Moscow
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
       - SPRING_DATASOURCE_USERNAME=practicum
       - SPRING_DATASOURCE_PASSWORD=practicum
@@ -20,6 +21,7 @@ services:
     ports:
       - "1234:5432"
     environment:
+      - TZ=Europe/Moscow
       - POSTGRES_DB=stats-db
       - POSTGRES_USER=practicum
       - POSTGRES_PASSWORD=practicum
@@ -33,6 +35,7 @@ services:
       - ewm-db
       - stats-server
     environment:
+      - TZ=Europe/Moscow
       - STATS_SERVER_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
       - SPRING_DATASOURCE_USERNAME=practicum
@@ -46,6 +49,7 @@ services:
     ports:
       - "2345:5432"
     environment:
+      - TZ=Europe/Moscow
       - POSTGRES_DB=ewm-db
       - POSTGRES_USER=practicum
       - POSTGRES_PASSWORD=practicum
