@@ -25,6 +25,7 @@ import ru.practicum.excception.ConflictException;
 import ru.practicum.excception.EntityNotFoundException;
 import ru.practicum.excception.InternalException;
 import ru.practicum.request.dto.RequestLogDto;
+import ru.practicum.request.dto.RequestUpdateLogDto;
 import ru.practicum.request.dto.RequestUpdateStatusDto;
 import ru.practicum.request.model.Request;
 import ru.practicum.request.model.RequestMapper;
@@ -149,7 +150,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public List<RequestLogDto> updateRequestStatus(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto) {
+    public RequestUpdateLogDto updateRequestStatus(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Событие с id=" + eventId + " для пользователя с id=" + userId + " не найдено"));
         List<Request> requests = requestRepository.findByIdInAndEventId(requestUpdateStatusDto.getRequestIds(), eventId);
@@ -162,9 +163,11 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Уже достигнут лимит по заявкам на данное событие");
         }
 
-        List<Request> requestsResult;
+        List<Request> confirmedRequests = new ArrayList<>();
+        List<Request> rejectedRequests = new ArrayList<>();
+
         if (status == RequestStatus.CONFIRMED) {
-            requestsResult = requests.stream()
+            confirmedRequests = requests.stream()
                     .limit(limitToConfirm)
                     .peek(req -> {
                         if (req.getStatus() != RequestStatus.PENDING) {
@@ -175,7 +178,7 @@ public class EventServiceImpl implements EventService {
                     })
                     .collect(Collectors.toList());
         } else if (status == RequestStatus.REJECTED) {
-            requestsResult = requests.stream()
+            rejectedRequests = requests.stream()
                     .peek(req -> {
                         if (req.getStatus() != RequestStatus.PENDING) {
                             throw new ConflictException("Статус можно изменить только у заявок, находящихся в состоянии ожидания");
@@ -189,7 +192,8 @@ public class EventServiceImpl implements EventService {
         if (actualConfirmRequests != event.getConfirmedRequests()) {
             eventRepository.flush();
         }
-        return RequestMapper.toListRequestLogDto(requestRepository.saveAll(requestsResult));
+        return RequestMapper.toRequestUpdateLogDto(requestRepository.saveAll(confirmedRequests),
+                requestRepository.saveAll(rejectedRequests));
     }
 
     @Override

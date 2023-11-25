@@ -7,6 +7,7 @@ import ru.practicum.event.dto.EventUpdateDto;
 import ru.practicum.event.model.EventSort;
 import ru.practicum.event.model.EventState;
 import ru.practicum.request.dto.RequestLogDto;
+import ru.practicum.request.dto.RequestUpdateLogDto;
 import ru.practicum.request.dto.RequestUpdateStatusDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public interface EventService {
 
     List<RequestLogDto> getEventRequests(Long userId, Long eventId);
 
-    List<RequestLogDto> updateRequestStatus(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto);
+    RequestUpdateLogDto updateRequestStatus(Long userId, Long eventId, RequestUpdateStatusDto requestUpdateStatusDto);
 
     List<EventLogDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                     LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);

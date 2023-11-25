@@ -11,6 +11,7 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventUpdateDto;
 import ru.practicum.event.service.EventService;
 import ru.practicum.request.dto.RequestLogDto;
+import ru.practicum.request.dto.RequestUpdateLogDto;
 import ru.practicum.request.dto.RequestUpdateStatusDto;
 
 import javax.validation.Valid;
@@ -69,9 +70,9 @@ public class PrivateEventController {
     }
 
     @PatchMapping("/{eventId}/requests")
-    public ResponseEntity<List<RequestLogDto>> updateRequestStatus(@Valid @RequestBody RequestUpdateStatusDto requestUpdateStatusDto,
-                                                    @PathVariable Long userId,
-                                                    @PathVariable Long eventId) {
+    public ResponseEntity<RequestUpdateLogDto> updateRequestStatus(@Valid @RequestBody RequestUpdateStatusDto requestUpdateStatusDto,
+                                                                   @PathVariable Long userId,
+                                                                   @PathVariable Long eventId) {
         log.info("Получен PATCH-запрос к эндпоинту: '/users/{userId}/events/{eventId}/requests' от пользователя с id={} на обновление статуса" +
                         " запроса для события с id={}: {}", userId, eventId, requestUpdateStatusDto);
         return new ResponseEntity<>(eventService.updateRequestStatus(userId, eventId, requestUpdateStatusDto), HttpStatus.OK);
