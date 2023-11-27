@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationLogDto;
-import ru.practicum.compilation.service.CompilationService;
+import ru.practicum.compilation.service.PublicCompilationService;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/compilations")
 public class PublicCompilationController {
-    private final CompilationService compilationService;
+    private final PublicCompilationService publicCompilationService;
 
-    public PublicCompilationController(CompilationService compilationService) {
-        this.compilationService = compilationService;
+    public PublicCompilationController(PublicCompilationService publicCompilationService) {
+        this.publicCompilationService = publicCompilationService;
     }
 
     @GetMapping
@@ -26,12 +26,12 @@ public class PublicCompilationController {
                                                           @RequestParam(defaultValue = "0") int from,
                                                           @RequestParam(defaultValue = "10") int size) {
         log.info("Получен GET-запрос к эндпоинту: '/compilations' на получение списка подборок");
-        return new ResponseEntity<>(compilationService.getAll(pinned, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(publicCompilationService.getAll(pinned, from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{compId}")
     public ResponseEntity<CompilationLogDto> getAll(@PathVariable Long compId) {
         log.info("Получен GET-запрос к эндпоинту: '/compilations/{compId}' на получение подборки по id={}", compId);
-        return new ResponseEntity<>(compilationService.getById(compId), HttpStatus.OK);
+        return new ResponseEntity<>(publicCompilationService.getById(compId), HttpStatus.OK);
     }
 }

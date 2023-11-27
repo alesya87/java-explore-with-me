@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class RequestServiceImpl implements RequestService {
+public class PrivateRequestServiceImpl implements PrivateRequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
-    public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
-                              EventRepository eventRepository) {
+    public PrivateRequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
+                                     EventRepository eventRepository) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;

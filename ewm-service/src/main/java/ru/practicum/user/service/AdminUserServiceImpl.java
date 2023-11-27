@@ -12,10 +12,10 @@ import ru.practicum.user.repository.UserRepository;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AdminUserServiceImpl implements AdminUserService {
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public AdminUserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

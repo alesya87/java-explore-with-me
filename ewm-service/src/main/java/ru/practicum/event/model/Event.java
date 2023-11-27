@@ -10,16 +10,7 @@ import ru.practicum.event.location.model.Location;
 import ru.practicum.user.model.User;
 import ru.practicum.category.model.Category;
 
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
+import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -82,6 +73,6 @@ public class Event {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "views")
+    @Transient
     private Long views;
 }

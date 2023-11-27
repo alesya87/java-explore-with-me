@@ -4,7 +4,7 @@ import ru.practicum.request.dto.RequestLogDto;
 
 import java.util.List;
 
-public interface RequestService {
+public interface PrivateRequestService {
     RequestLogDto save(Long userId, Long eventId);
 
     List<RequestLogDto> getAllByUserId(Long userId);

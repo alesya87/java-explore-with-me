@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationAddDto;
 import ru.practicum.compilation.dto.CompilationLogDto;
 import ru.practicum.compilation.dto.CompilationUpdateDto;
-import ru.practicum.compilation.service.CompilationService;
+import ru.practicum.compilation.service.AdminCompilationService;
 
 import javax.validation.Valid;
 
@@ -17,23 +17,23 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(path = "/admin/compilations")
 public class AdminCompilationController {
-    private final CompilationService compilationService;
+    private final AdminCompilationService adminCompilationService;
 
-    public AdminCompilationController(CompilationService compilationService) {
-        this.compilationService = compilationService;
+    public AdminCompilationController(AdminCompilationService adminCompilationService) {
+        this.adminCompilationService = adminCompilationService;
     }
 
     @PostMapping
     public ResponseEntity<CompilationLogDto> save(@Valid @RequestBody CompilationAddDto compilationAddDto) {
         log.info("Получен POST-запрос к эндпоинту: '/admin/compilations' на добавление подборки: {}", compilationAddDto);
-        return new ResponseEntity<>(compilationService.save(compilationAddDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(adminCompilationService.save(compilationAddDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long compId) {
         log.info("Получен DELETE-запрос к эндпоинту: '/admin/compilations/{compId}' на удаление подборки по id={}", compId);
-        compilationService.delete(compId);
+        adminCompilationService.delete(compId);
     }
 
     @PatchMapping("/{compId}")
@@ -41,6 +41,6 @@ public class AdminCompilationController {
                                                     @PathVariable Long compId) {
         log.info("Получен PATCH-запрос к эндпоинту: '/admin/compilations/{compId}' на изменение подборки с id={}: {}",
                 compId, compilationUpdateDto);
-        return new ResponseEntity<>(compilationService.update(compilationUpdateDto, compId), HttpStatus.OK);
+        return new ResponseEntity<>(adminCompilationService.update(compilationUpdateDto, compId), HttpStatus.OK);
     }
 }

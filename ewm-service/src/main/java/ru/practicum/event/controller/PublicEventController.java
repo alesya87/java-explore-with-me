@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventLogDto;
 import ru.practicum.event.model.EventSort;
-import ru.practicum.event.service.EventService;
+import ru.practicum.event.service.PublicEventService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -19,16 +19,16 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/events")
 public class PublicEventController {
-    private final EventService eventService;
+    private final PublicEventService publicEventService;
 
-    public PublicEventController(EventService eventService) {
-        this.eventService = eventService;
+    public PublicEventController(PublicEventService publicEventService) {
+        this.publicEventService = publicEventService;
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<EventLogDto> getByEventId(@PathVariable Long eventId, HttpServletRequest request) {
         log.info("Получен GET-запрос к эндпоинту: '/events/{eventId}' на получение события с id={}", eventId);
-        return new ResponseEntity<>(eventService.getByEventId(eventId, request), HttpStatus.OK);
+        return new ResponseEntity<>(publicEventService.getByEventId(eventId, request), HttpStatus.OK);
     }
 
     @GetMapping
@@ -47,7 +47,7 @@ public class PublicEventController {
         log.info("Получен GET-запрос к эндпоинту: '/events' на получение списка событий с параметрами:" +
                         " text={}, categories={}, paid={}, rangeStart={}, rangeEnd={}, onlyAvailable={}, sort={} from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        return new ResponseEntity<>(eventService.getAll(text, categories, paid, rangeStart,
+        return new ResponseEntity<>(publicEventService.getAll(text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, sort, from, size, request),
                 HttpStatus.OK);
     }

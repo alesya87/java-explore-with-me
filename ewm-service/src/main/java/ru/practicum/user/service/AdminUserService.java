@@ -5,7 +5,7 @@ import ru.practicum.user.dto.UserLogDto;
 
 import java.util.List;
 
-public interface UserService {
+public interface AdminUserService {
     UserLogDto save(UserAddDto userAddDto);
 
     List<UserLogDto> get(Long[] ids, int from, int size);

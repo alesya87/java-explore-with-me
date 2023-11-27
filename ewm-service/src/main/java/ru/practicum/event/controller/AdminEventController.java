@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventLogDto;
 import ru.practicum.event.dto.EventUpdateDto;
 import ru.practicum.event.model.EventState;
-import ru.practicum.event.service.EventService;
+import ru.practicum.event.service.AdminEventService;
 
 import javax.validation.Valid;
 
@@ -21,10 +21,10 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin/events")
 public class AdminEventController {
-    private final EventService eventService;
+    private final AdminEventService adminEventService;
 
-    public AdminEventController(EventService eventService) {
-        this.eventService = eventService;
+    public AdminEventController(AdminEventService adminEventService) {
+        this.adminEventService = adminEventService;
     }
 
     @GetMapping
@@ -38,13 +38,13 @@ public class AdminEventController {
         log.info("Получен GET-запрос к эндпоинту: '/admin/events' на получение списка событий с параметрами:" +
                 " users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
                 users, states, categories, rangeStart, rangeEnd, from, size);
-        return new ResponseEntity<>(eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size),
+        return new ResponseEntity<>(adminEventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size),
                         HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}")
     public ResponseEntity<EventLogDto> updateByAdmin(@Valid @RequestBody EventUpdateDto eventUpdateUserDto, @PathVariable Long eventId) {
         log.info("Получен PATCH-запрос к эндпоинту: '/admin/events' на обновление события с id={}: {}", eventId, eventUpdateUserDto);
-        return new ResponseEntity<>(eventService.updateByAdmin(eventId, eventUpdateUserDto), HttpStatus.OK);
+        return new ResponseEntity<>(adminEventService.updateByAdmin(eventId, eventUpdateUserDto), HttpStatus.OK);
     }
 }

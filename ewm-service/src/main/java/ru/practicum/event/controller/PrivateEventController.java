@@ -9,7 +9,7 @@ import ru.practicum.event.dto.EventAddDto;
 import ru.practicum.event.dto.EventLogDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventUpdateDto;
-import ru.practicum.event.service.EventService;
+import ru.practicum.event.service.PrivateEventService;
 import ru.practicum.request.dto.RequestLogDto;
 import ru.practicum.request.dto.RequestUpdateLogDto;
 import ru.practicum.request.dto.RequestUpdateStatusDto;
@@ -23,17 +23,17 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users/{userId}/events")
 public class PrivateEventController {
-    private final EventService eventService;
+    private final PrivateEventService privateEventService;
 
-    public PrivateEventController(EventService eventService) {
-        this.eventService = eventService;
+    public PrivateEventController(PrivateEventService privateEventService) {
+        this.privateEventService = privateEventService;
     }
 
     @PostMapping
     public ResponseEntity<EventLogDto> save(@Valid @RequestBody EventAddDto eventAddDto, @PathVariable Long userId) {
         log.info("Получен POST-запрос к эндпоинту: '/users/{userId}/events' от пользователя с id={} на добавление события: {}",
                 userId, eventAddDto);
-        return new ResponseEntity<>(eventService.save(eventAddDto, userId), HttpStatus.CREATED);
+        return new ResponseEntity<>(privateEventService.save(eventAddDto, userId), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -42,7 +42,7 @@ public class PrivateEventController {
                                                               @RequestParam(defaultValue = "10") int size) {
         log.info("Получен GET-запрос к эндпоинту: '/users/{userId}/events' от пользователя с id={} на получение списка событий",
                 userId);
-        return new ResponseEntity<>(eventService.getAllByUserId(userId, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(privateEventService.getAllByUserId(userId, from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}")
@@ -50,7 +50,7 @@ public class PrivateEventController {
                                                            @PathVariable Long eventId) {
         log.info("Получен GET-запрос к эндпоинту: '/users/{userId}/events/{eventId}' от пользователя с id={} на получение события с id={}",
                 userId, eventId);
-        return new ResponseEntity<>(eventService.getByUserAndEventId(userId, eventId), HttpStatus.OK);
+        return new ResponseEntity<>(privateEventService.getByUserAndEventId(userId, eventId), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}")
@@ -59,14 +59,14 @@ public class PrivateEventController {
                                                     @PathVariable Long eventId) {
         log.info("Получен PATCH-запрос к эндпоинту: '/users/{userId}/events/{eventId}' от пользователя с id={} на обновление события с id={}: {}",
                 userId, eventId, eventUpdateDto);
-        return new ResponseEntity<>(eventService.updateByUser(userId, eventId, eventUpdateDto), HttpStatus.OK);
+        return new ResponseEntity<>(privateEventService.updateByUser(userId, eventId, eventUpdateDto), HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}/requests")
     public ResponseEntity<List<RequestLogDto>> getEventRequests(@PathVariable Long userId, @PathVariable Long eventId) {
         log.info("Получен GET-запрос к эндпоинту: '/users/{userId}/events/{eventId}/requests' от пользователя с id={} на" +
-                        " просмотр подтвержденных запросов для события с id={}", userId, eventId);
-        return new ResponseEntity<>(eventService.getEventRequests(userId, eventId), HttpStatus.OK);
+                " просмотр подтвержденных запросов для события с id={}", userId, eventId);
+        return new ResponseEntity<>(privateEventService.getEventRequests(userId, eventId), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}/requests")
@@ -74,7 +74,7 @@ public class PrivateEventController {
                                                                    @PathVariable Long userId,
                                                                    @PathVariable Long eventId) {
         log.info("Получен PATCH-запрос к эндпоинту: '/users/{userId}/events/{eventId}/requests' от пользователя с id={} на обновление статуса" +
-                        " запроса для события с id={}: {}", userId, eventId, requestUpdateStatusDto);
-        return new ResponseEntity<>(eventService.updateRequestStatus(userId, eventId, requestUpdateStatusDto), HttpStatus.OK);
+                " запроса для события с id={}: {}", userId, eventId, requestUpdateStatusDto);
+        return new ResponseEntity<>(privateEventService.updateRequestStatus(userId, eventId, requestUpdateStatusDto), HttpStatus.OK);
     }
 }
