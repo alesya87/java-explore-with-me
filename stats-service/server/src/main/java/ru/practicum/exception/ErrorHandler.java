@@ -12,7 +12,7 @@ import java.time.format.DateTimeParseException;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler({DateTimeParseException.class, MissingServletRequestParameterException.class})
+    @ExceptionHandler({DateTimeParseException.class, MissingServletRequestParameterException.class, BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestException(final Exception e) {
         log.error(e.getMessage());

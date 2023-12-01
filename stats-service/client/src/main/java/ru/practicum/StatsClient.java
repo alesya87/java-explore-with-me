@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
 public class StatsClient extends BaseClient {
     private static final String PATH_HIT = "/hit";
     private static final String PATH_STATS = "/stats";
+    private static final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
     @Autowired
     public StatsClient(@Value("${stats-service.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -25,10 +29,10 @@ public class StatsClient extends BaseClient {
         return post(PATH_HIT, hitAddDto);
     }
 
-    public ResponseEntity<Object> getStats(String start, String end, String[] uris, Boolean unique) {
+    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, String[] uris, Boolean unique) {
         Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
+                "start", start.format(DATE_FORMAT),
+                "end", end.format(DATE_FORMAT),
                 "uris", uris,
                 "unique", unique
         );
