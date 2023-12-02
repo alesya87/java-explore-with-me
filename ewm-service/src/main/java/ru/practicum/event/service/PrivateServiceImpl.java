@@ -31,6 +31,7 @@ import ru.practicum.user.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,7 +71,8 @@ public class PrivateServiceImpl implements PrivateEventService {
     @Transactional(readOnly = true)
     public List<EventShortDto> getAllByUserId(Long userId, int from, int size) {
         List<Event> events = eventRepository.findAllByInitiatorId(userId, PageRequest.of(from / size, size));
-        events.forEach(event -> event.setViews(Stats.getViewsCount(statsClient, event)));
+        Map<Long, Long> eventsViews = Stats.getViewsCount(statsClient, events);
+        events.forEach(event -> event.setViews(eventsViews.get(event.getId())));
         return EventMapper.toListEventShortDto(events);
     }
 

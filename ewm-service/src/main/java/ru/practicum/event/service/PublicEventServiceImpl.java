@@ -53,17 +53,16 @@ public class PublicEventServiceImpl implements PublicEventService {
         List<Event> events = eventRepository.getAll(text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, PageRequest.of(from / size, size));
         Stats.addView(statsClient, request.getRequestURI(), request.getRemoteAddr());
-        if (sort == EventSort.EVENT_DATE) {
-            events = events.stream()
-                    .peek(event -> event.setViews(Stats.getViewsCount(statsClient, event)))
-                    .sorted(Comparator.comparing(Event::getEventDate))
-                    .collect(Collectors.toList());
-        } else {
-            events = events.stream()
-                    .peek(event -> event.setViews(Stats.getViewsCount(statsClient, event)))
-                    .sorted(Comparator.comparing(Event::getViews))
-                    .collect(Collectors.toList());
-        }
+
+        Map<Long, Long> eventsViews = Stats.getViewsCount(statsClient, events);
+        Comparator<Event> comparator = (sort == EventSort.EVENT_DATE) ?
+                Comparator.comparing(Event::getEventDate) :
+                Comparator.comparing(event -> eventsViews.get(event.getId()));
+        events = events.stream()
+                .peek(event -> event.setViews(eventsViews.get(event.getId())))
+                .sorted(comparator)
+                .collect(Collectors.toList());
+
         return EventMapper.toListEventLogDto(events);
     }
 }
