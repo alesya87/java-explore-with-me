@@ -20,6 +20,7 @@ import ru.practicum.excception.EntityNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -43,7 +44,8 @@ public class AdminEventServiceImpl implements AdminEventService {
                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
         List<Event> events = eventRepository.getAllByAdmin(users, states, categories,
                 rangeStart, rangeEnd, PageRequest.of(from / size, size));
-        events.forEach(event -> event.setViews(Stats.getViewsCount(statsClient, event)));
+        Map<Long, Long> eventsViews = Stats.getViewsCount(statsClient, events);
+        events.forEach(event -> event.setViews(eventsViews.get(event.getId())));
         return EventMapper.toListEventLogDto(events);
     }
 
